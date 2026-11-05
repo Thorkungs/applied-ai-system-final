@@ -59,3 +59,51 @@ def test_explain_recommendation_returns_non_empty_string():
     explanation = rec.explain_recommendation(user, song)
     assert isinstance(explanation, str)
     assert explanation.strip() != ""
+
+
+# ---- Additional tests for the functional API ----
+import os
+
+from src.recommender import load_songs, recommend_songs, score_song
+
+DATA_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data", "songs.csv")
+
+
+def test_load_songs_converts_numeric_fields():
+    songs = load_songs(DATA_PATH)
+    assert len(songs) == 20
+    assert isinstance(songs[0]["id"], int)
+    assert isinstance(songs[0]["energy"], float)
+    assert isinstance(songs[0]["tempo_bpm"], float)
+
+
+def test_score_song_returns_score_and_reasons():
+    song = {"genre": "pop", "mood": "happy", "energy": 0.8, "acousticness": 0.2}
+    score, reasons = score_song({"genre": "pop", "mood": "happy", "energy": 0.8}, song)
+    assert score == 4.5  # 2.0 genre + 1.0 mood + 1.5 perfect energy
+    assert any("genre match" in r for r in reasons)
+    assert any("mood match" in r for r in reasons)
+
+
+def test_energy_rewards_closeness_not_magnitude():
+    prefs = {"energy": 0.4}
+    close, _ = score_song(prefs, {"genre": "x", "mood": "y", "energy": 0.45, "acousticness": 0.5})
+    loud, _ = score_song(prefs, {"genre": "x", "mood": "y", "energy": 0.95, "acousticness": 0.5})
+    assert close > loud
+
+
+def test_recommend_songs_sorted_and_limited_to_k():
+    songs = load_songs(DATA_PATH)
+    results = recommend_songs({"genre": "lofi", "mood": "chill", "energy": 0.35}, songs, k=3)
+    assert len(results) == 3
+    scores = [score for _, score, _ in results]
+    assert scores == sorted(scores, reverse=True)
+    assert results[0][0]["genre"] == "lofi"
+
+
+def test_custom_weights_change_ranking():
+    songs = load_songs(DATA_PATH)
+    prefs = {"genre": "pop", "mood": "happy", "energy": 0.8}
+    base = [s["title"] for s, _, _ in recommend_songs(prefs, songs, k=3)]
+    shifted = [s["title"] for s, _, _ in recommend_songs(prefs, songs, k=3, weights={"genre": 1.0, "energy": 3.0})]
+    assert base != shifted
