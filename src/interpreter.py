@@ -14,7 +14,7 @@ Two stages:
 import json
 import re
 from dataclasses import dataclass, field
-from typing import Dict, List, Optional, Sequence, Tuple
+from typing import Dict, List, Sequence, Tuple
 
 from .knowledge import Passage
 from .textutil import TfidfIndex, normalize

@@ -227,6 +227,21 @@ class VibeAgent:
             issues.append("flat_ranking")
         return issues
 
+    @staticmethod
+    def _keeps_stated_labels(song: Dict, interp: Interpretation, context: RetrievedContext) -> bool:
+        """True if the song has every genre/mood the listener stated outright, or a related one.
+
+        Labels that were only guessed by the few-shot stage do not count, so a
+        revision can never trade a stated genre away for a guessed mood.
+        """
+        for slot, passage in (("genre", context.genre_passage), ("mood", context.mood_passage)):
+            wanted = interp.prefs[slot]
+            if wanted and interp.sources.get(slot) in ("keyword", "human"):
+                related = passage.related if passage is not None else []
+                if song[slot] != wanted and song[slot] not in related:
+                    return False
+        return True
+
     def _confidence(self, result: AgentResult, unresolved: bool) -> float:
         """Combine how well the request was understood, how well the top song fits, and the self-check.
 
@@ -313,13 +328,18 @@ class VibeAgent:
         unresolved = False
         if "energy_conflict" in issues:
             # The top pick ignored the energy that was asked for. Try again using only
-            # songs near that energy, and keep the new ranking if its top pick still
-            # fits the rest of the request reasonably well.
+            # songs near that energy, and keep the new ranking only if its top pick still
+            # fits the rest of the request and keeps the labels the listener stated.
             target = interp.prefs["energy"]
             nearby = [s for s in self.songs if abs(s["energy"] - target) <= ENERGY_CONFLICT_GAP]
             revised = self._rank(interp, context, k, songs=nearby)
             possible = max_possible_score(interp.prefs, context)
-            if revised and possible and revised[0].score / possible >= WEAK_FIT:
+            acceptable = (
+                bool(revised) and possible > 0
+                and revised[0].score / possible >= WEAK_FIT
+                and self._keeps_stated_labels(revised[0].song, interp, context)
+            )
+            if acceptable:
                 result.step("revise", "rerank", f"only songs within {ENERGY_CONFLICT_GAP:.2f} of energy {target:.2f}: {self._summarize(revised)}")
                 result.notes.append(
                     f"My first ranking put {recs[0].song['title']} (energy {recs[0].song['energy']:.2f}) on top "
@@ -331,8 +351,9 @@ class VibeAgent:
             else:
                 unresolved = True
                 best = f"best was {revised[0].song['title']} {revised[0].score:.2f}" if revised else "none found"
-                result.step("revise", "rerank", f"no song near energy {target:.2f} fits the rest of the request ({best}), keeping the first ranking")
-                closest = min(self.songs, key=lambda s: (abs(s["energy"] - target), s["title"]))
+                result.step("revise", "rerank", f"no song near energy {target:.2f} fits the rest of the request and its stated labels ({best}), keeping the first ranking")
+                allowed = [s for s in self.songs if s["genre"] not in interp.avoid_genres and s["mood"] not in interp.avoid_moods]
+                closest = min(allowed or self.songs, key=lambda s: (abs(s["energy"] - target), s["title"]))
                 wanted = " ".join(x for x in (interp.prefs["mood"], interp.prefs["genre"]) if x) or "that kind of song"
                 result.notes.append(
                     f"Nothing in the catalog is both {wanted} and near energy {target:.2f}. The top pick matches "

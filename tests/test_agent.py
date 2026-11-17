@@ -80,6 +80,17 @@ def test_resolvable_conflict_is_revised(agent):
     assert "energy_conflict" not in result.issues
 
 
+def test_revision_never_trades_a_stated_genre_for_a_guessed_mood(agent):
+    """Regression: "upbeat country" used to be revised into a pop song because of a few-shot mood guess."""
+    result = agent.run("upbeat country for a road trip")
+    assert result.interpretation.sources["genre"] == "keyword"
+    assert result.interpretation.sources["mood"] == "few-shot"
+    assert result.recommendations[0].song["genre"] == "country"
+    assert not result.revised
+    assert result.needs_review
+    assert any("Nothing in the catalog is both" in note for note in result.notes)
+
+
 def test_avoided_genre_never_appears(agent):
     result = agent.run("upbeat music, anything but pop", k=10)
     assert result.recommendations
