@@ -13,3 +13,6 @@ venv/
 
 # Pytest cache
 .pytest_cache/
+
+# Runtime logs (sample runs are committed under assets/sample_runs/)
+logs/
