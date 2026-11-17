@@ -1,0 +1,56 @@
+[
+  {"text": "music for the gym", "prefs": {"mood": "intense", "energy": 0.92}},
+  {"text": "I need a playlist for my workout", "prefs": {"mood": "intense", "energy": 0.92}},
+  {"text": "songs for running and lifting weights", "prefs": {"mood": "intense", "energy": 0.9}},
+
+  {"text": "background music for studying", "prefs": {"mood": "focused", "energy": 0.4}},
+  {"text": "help me focus while I code", "prefs": {"mood": "focused", "energy": 0.4}},
+  {"text": "something to concentrate on homework and work", "prefs": {"mood": "focused", "energy": 0.4}},
+
+  {"text": "music to fall asleep to", "prefs": {"mood": "chill", "energy": 0.25}},
+  {"text": "help me relax and wind down before bed", "prefs": {"mood": "chill", "energy": 0.3}},
+  {"text": "calming sounds for meditation", "prefs": {"mood": "chill", "energy": 0.25}},
+
+  {"text": "songs for a party tonight", "prefs": {"mood": "euphoric", "energy": 0.92}},
+  {"text": "I want to dance all night at the club", "prefs": {"mood": "euphoric", "energy": 0.95}},
+  {"text": "we are celebrating, turn it up", "prefs": {"mood": "euphoric", "energy": 0.9}},
+
+  {"text": "I just went through a breakup", "prefs": {"mood": "sad", "energy": 0.3}},
+  {"text": "songs to cry to", "prefs": {"mood": "sad", "energy": 0.3}},
+  {"text": "my heart is broken and I miss her", "prefs": {"mood": "sad", "energy": 0.3}},
+
+  {"text": "music for a date night dinner", "prefs": {"mood": "romantic", "energy": 0.5}},
+  {"text": "something for a candlelit evening with my girlfriend", "prefs": {"mood": "romantic", "energy": 0.5}},
+  {"text": "slow dancing with my partner on our anniversary", "prefs": {"mood": "romantic", "energy": 0.45}},
+
+  {"text": "road trip with friends on a sunny day", "prefs": {"mood": "happy", "energy": 0.8}},
+  {"text": "feel good songs for summer", "prefs": {"mood": "happy", "energy": 0.8}},
+  {"text": "cheer me up and put me in a good mood", "prefs": {"mood": "happy", "energy": 0.75}},
+
+  {"text": "sunday morning coffee", "prefs": {"mood": "relaxed", "energy": 0.4}},
+  {"text": "cooking dinner and having brunch with family", "prefs": {"mood": "relaxed", "energy": 0.4}},
+  {"text": "easy listening for a lazy afternoon", "prefs": {"mood": "relaxed", "energy": 0.4}},
+
+  {"text": "I am so angry right now", "prefs": {"mood": "angry", "energy": 0.95}},
+  {"text": "I need to vent and blow off steam", "prefs": {"mood": "angry", "energy": 0.95}},
+  {"text": "rage music after a terrible day", "prefs": {"mood": "angry", "energy": 0.95}},
+
+  {"text": "songs that remind me of home", "prefs": {"mood": "nostalgic", "energy": 0.55}},
+  {"text": "throwback to growing up, old memories", "prefs": {"mood": "nostalgic", "energy": 0.55}},
+  {"text": "missing my hometown and childhood", "prefs": {"mood": "nostalgic", "energy": 0.5}},
+
+  {"text": "hype me up before a job interview", "prefs": {"mood": "confident", "energy": 0.8}},
+  {"text": "walk-up music before the big game", "prefs": {"mood": "confident", "energy": 0.85}},
+  {"text": "I want to feel like a boss, unstoppable", "prefs": {"mood": "confident", "energy": 0.8}},
+
+  {"text": "gloomy rainy night alone", "prefs": {"mood": "melancholy", "energy": 0.25}},
+  {"text": "quiet reflection on a grey winter evening", "prefs": {"mood": "melancholy", "energy": 0.25}},
+  {"text": "driving alone through the city at night, lost in my thoughts", "prefs": {"mood": "moody", "energy": 0.7}},
+
+  {"text": "campfire songs with a guitar", "prefs": {"mood": "relaxed", "energy": 0.4, "likes_acoustic": true}},
+  {"text": "just a voice and a guitar, nothing electric", "prefs": {"energy": 0.35, "likes_acoustic": true}},
+  {"text": "big synths and heavy bass drops", "prefs": {"energy": 0.9, "likes_acoustic": false}},
+
+  {"text": "beats to study and chill to", "prefs": {"genre": "lofi", "mood": "chill", "energy": 0.4}},
+  {"text": "headbanging riffs and screaming", "prefs": {"genre": "metal", "mood": "angry", "energy": 0.95}}
+]
