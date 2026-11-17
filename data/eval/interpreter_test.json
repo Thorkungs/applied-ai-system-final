@@ -1,0 +1,27 @@
+[
+  {"group": "explicit labels", "text": "angry metal", "gold": {"genre": "metal", "mood": "angry"}},
+  {"group": "explicit labels", "text": "nostalgic country songs", "gold": {"genre": "country", "mood": "nostalgic"}},
+  {"group": "explicit labels", "text": "romantic r&b, slow", "gold": {"genre": "r&b", "mood": "romantic", "energy": 0.3}},
+  {"group": "explicit labels", "text": "energetic latin music", "gold": {"genre": "latin", "mood": "energetic"}},
+  {"group": "explicit labels", "text": "melancholy classical piano", "gold": {"genre": "classical", "mood": "melancholy"}},
+  {"group": "explicit labels", "text": "relaxed reggae", "gold": {"genre": "reggae", "mood": "relaxed"}},
+
+  {"group": "situational", "text": "about to hit the gym", "gold": {"mood": "intense", "energy": 0.92}},
+  {"group": "situational", "text": "going for a run", "gold": {"mood": "intense", "energy": 0.9}},
+  {"group": "situational", "text": "I have a big exam tomorrow and need to study", "gold": {"mood": "focused", "energy": 0.4}},
+  {"group": "situational", "text": "writing code late tonight", "gold": {"mood": "focused", "energy": 0.4}},
+  {"group": "situational", "text": "trying to sleep", "gold": {"mood": "chill", "energy": 0.25}},
+  {"group": "situational", "text": "birthday party tonight", "gold": {"mood": "euphoric", "energy": 0.92}},
+  {"group": "situational", "text": "just got dumped", "gold": {"mood": "sad", "energy": 0.3}},
+  {"group": "situational", "text": "anniversary dinner with my husband", "gold": {"mood": "romantic", "energy": 0.5}},
+  {"group": "situational", "text": "driving to the beach with friends", "gold": {"mood": "happy", "energy": 0.8}},
+  {"group": "situational", "text": "making breakfast on a slow morning", "gold": {"mood": "relaxed", "energy": 0.4}},
+  {"group": "situational", "text": "I'm so mad at my boss", "gold": {"mood": "angry", "energy": 0.95}},
+  {"group": "situational", "text": "thinking about my old high school days", "gold": {"mood": "nostalgic", "energy": 0.55}},
+  {"group": "situational", "text": "big presentation at work in an hour", "gold": {"mood": "confident", "energy": 0.8}},
+  {"group": "situational", "text": "it's raining and I feel lonely", "gold": {"mood": "melancholy", "energy": 0.25}},
+  {"group": "situational", "text": "yoga and stretching", "gold": {"mood": "chill", "energy": 0.3}},
+  {"group": "situational", "text": "walking home alone at night", "gold": {"mood": "moody", "energy": 0.7}},
+  {"group": "situational", "text": "getting ready to go out dancing", "gold": {"mood": "euphoric", "energy": 0.92}},
+  {"group": "situational", "text": "something acoustic for the porch", "gold": {"likes_acoustic": true}}
+]
