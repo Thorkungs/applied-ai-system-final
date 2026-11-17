@@ -1,0 +1,62 @@
+flowchart TD
+    user(["Listener types a request<br/>e.g. 'something for date night'"])
+
+    subgraph data["Data sources"]
+        shots[("few_shot_examples.json<br/>41 labeled requests")]
+        kb[("data/knowledge/*.md<br/>genre guide, mood guide, song liner notes")]
+        songs[("data/songs.csv<br/>20 songs")]
+    end
+
+    subgraph agent["VibeAgent (src/agent.py): plan, act, check, revise"]
+        g_in{{"Input guardrail<br/>empty, too long, no words, crisis language"}}
+        interp["Interpreter<br/>keywords, then few-shot examples"]
+        plan["Planner<br/>decides which lookups this request needs"]
+        retr["Retriever<br/>TF-IDF search over the knowledge base"]
+        score["Knowledge-augmented scorer<br/>1.0 recipe + related labels + liner notes"]
+        check{"Self-check<br/>energy ignored? weak match? genre missing?"}
+        revise["Revise<br/>re-rank using only songs near the requested energy"]
+        g_out{{"Output guardrail<br/>songs exist, citations and quotes are real"}}
+        fallback["Fallback<br/>1.0 exact-match ranking, no sources"]
+        conf["Confidence estimate<br/>understood + fit + self-check"]
+    end
+
+    answer(["Answer: ranked songs, reasons, cited sources, confidence"])
+    blocked(["Message instead of songs<br/>rejection, clarifying question, or support note"])
+    human(["Human review<br/>listener confirms or corrects what was understood"])
+
+    subgraph testing["Reliability testing"]
+        harness["Evaluation harness (src/evaluate.py)<br/>24 predefined requests, full system vs baseline"]
+        tests["pytest suite<br/>74 tests"]
+        report["Pass/fail summary, confidence, sample logs"]
+        dev(["Developer reads the report"])
+    end
+
+    user --> g_in
+    g_in -- "ok" --> interp
+    g_in -- "blocked" --> blocked
+    shots --> interp
+    interp -- "taste profile: genre, mood, energy, avoid list" --> plan
+    interp -- "nothing understood and no notes match" --> blocked
+    plan --> retr
+    kb --> retr
+    retr -- "passages with doc ids" --> score
+    songs --> score
+    score -- "ranked songs" --> check
+    check -- "energy conflict" --> revise
+    revise -- "new ranking" --> check
+    check -- "checked ranking" --> g_out
+    g_out -- "verified" --> conf
+    g_out -- "failed" --> fallback
+    fallback --> conf
+    conf --> answer
+    conf -- "low confidence or unresolved issue" --> human
+    human -- "corrections (--confirm) or a new request" --> g_in
+
+    agent -. "every step" .-> trace[("Trace and logs/vibefinder.log")]
+    harness -- "requests" --> g_in
+    answer -- "results" --> harness
+    tests -- "unit and end-to-end checks" --> agent
+    harness --> report
+    tests --> report
+    trace --> report
+    report --> dev

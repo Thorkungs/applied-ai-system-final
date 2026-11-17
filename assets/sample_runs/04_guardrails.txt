@@ -1,0 +1,50 @@
+$ python -m src.main "" 
+========================================================================
+Request:    (empty)
+Status:     rejected
+------------------------------------------------------------------------
+Request not accepted: Please type what you feel like listening to.
+
+$ python -m src.main "?!?!?! 12345" 
+========================================================================
+Request:    ?!?!?! 12345
+Status:     rejected
+------------------------------------------------------------------------
+Request not accepted: I couldn't find any words in that. Try something like 'chill lofi for studying'.
+
+$ python -m src.main "what is the capital of France" 
+========================================================================
+Request:    what is the capital of France
+Status:     clarify
+------------------------------------------------------------------------
+I need a little more to go on: I couldn't find a music preference in that. Tell me a genre, a mood, an energy level, or what you're doing, for example: 'chill lofi for studying' or 'something for the gym'.
+
+$ python -m src.main "I want to die, play something sad" 
+========================================================================
+Request:    I want to die, play something sad
+Status:     support
+------------------------------------------------------------------------
+A note before any music: It sounds like you might be going through something really painful. I'm only a music recommender and can't help with this the way a person can. If you are in the US you can call or text 988 (Suicide & Crisis Lifeline) at any time. Anywhere else, please reach out to a local crisis line or someone you trust. If you would just like some calm music, ask me for that and I'll find some.
+
+$ python -m src.main "upbeat music, anything but pop" 
+========================================================================
+Request:    upbeat music, anything but pop
+Understood: energy=0.90 (keyword) | avoid genre=pop
+Plan:
+  1. search the song liner notes for the wording of the request
+  2. score all 20 songs and rank them
+  3. self-check the top results and re-rank if a stated preference was ignored
+  4. verify songs, citations and quotes before answering
+------------------------------------------------------------------------
+Top 3 of 20 songs
+1. Storm Runner by Voltline [rock, intense]  score 1.49
+     - energy 0.91 vs target 0.90 (+1.48)
+2. Fuego Nocturno by Los Brillantes [latin, energetic]  score 1.44
+     - energy 0.86 vs target 0.90 (+1.44)
+3. Laser Bloom by Pulse Garden [edm, euphoric]  score 1.43
+     - energy 0.95 vs target 0.90 (+1.43)
+------------------------------------------------------------------------
+Self-check: flat_ranking
+Note:       These songs scored almost the same. Adding a genre or mood would sharpen the ranking.
+Confidence: 0.74 (medium)
+

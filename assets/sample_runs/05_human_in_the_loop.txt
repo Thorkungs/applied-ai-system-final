@@ -1,0 +1,34 @@
+$ printf "energy=0.9 genre=rock
+" | python -m src.main "sad folk songs" --confirm
+I understood: genre=folk (keyword) | mood=sad (keyword)
+Press Enter to accept, or type corrections such as: genre=jazz energy=0.4 acoustic=yes
+> Using your corrections: energy=0.9, genre=rock
+========================================================================
+Request:    sad folk songs
+Understood: genre=rock (human) | mood=sad (keyword) | energy=0.90 (human)
+Plan:
+  1. look up the genre guide for 'rock' (neighbors, typical energy)
+  2. look up the mood guide for 'sad' (neighbors, typical energy)
+  3. search the song liner notes for the wording of the request
+  4. score all 20 songs and rank them
+  5. self-check the top results and re-rank if a stated preference was ignored
+  6. verify songs, citations and quotes before answering
+------------------------------------------------------------------------
+Top 3 of 20 songs
+1. Storm Runner by Voltline [rock, intense]  score 3.48
+     - genre match: rock (+2.00)
+     - energy 0.91 vs target 0.90 (+1.48)
+2. Rainy Day Blues by Delta Mae [blues, sad]  score 2.81
+     - mood match: sad (+1.00)
+     - energy 0.44 vs target 0.90 (+0.81)
+     - related genre: blues is close to rock (+1.00) [genres.md#rock]
+       "Rock is driven by electric guitars, bass and live drums with a strong backbeat."
+3. Iron Cathedral by Black Anvil [metal, angry]  score 2.40
+     - energy 0.97 vs target 0.90 (+1.40)
+     - related genre: metal is close to rock (+1.00) [genres.md#rock]
+       "Rock is driven by electric guitars, bass and live drums with a strong backbeat."
+------------------------------------------------------------------------
+Self-check: no issues
+Confidence: 0.91 (high)
+Sources:    genres.md#rock
+

@@ -1,0 +1,113 @@
+$ python -m src.main "happy pop songs" --trace
+========================================================================
+Request:    happy pop songs
+Understood: genre=pop (keyword) | mood=happy (keyword)
+Plan:
+  1. look up the genre guide for 'pop' (neighbors, typical energy)
+  2. look up the mood guide for 'happy' (neighbors, typical energy)
+  3. search the song liner notes for the wording of the request
+  4. no energy level stated, so take a typical energy from the guides
+  5. score all 20 songs and rank them
+  6. self-check the top results and re-rank if a stated preference was ignored
+  7. verify songs, citations and quotes before answering
+------------------------------------------------------------------------
+Top 3 of 20 songs
+1. Sunrise City by Neon Echo [pop, happy]  score 3.70
+     - genre match: pop (+2.00)
+     - mood match: happy (+1.00)
+     - energy 0.82 vs typical 0.75 from the guide (+0.70) [moods.md#happy]
+2. Rooftop Lights by Indigo Parade [indie pop, happy]  score 2.74
+     - mood match: happy (+1.00)
+     - related genre: indie pop is close to pop (+1.00) [genres.md#pop]
+       "Pop is hook driven and polished, built around a big sing-along chorus and bright production."
+     - energy 0.76 vs typical 0.75 from the guide (+0.74) [moods.md#happy]
+3. Gym Hero by Max Pulse [pop, intense]  score 2.62
+     - genre match: pop (+2.00)
+     - energy 0.93 vs typical 0.75 from the guide (+0.61) [moods.md#happy]
+------------------------------------------------------------------------
+Self-check: no issues
+Confidence: 0.99 (high)
+Sources:    moods.md#happy, genres.md#pop
+------------------------------------------------------------------------
+Agent trace
+  [1] guardrail check_request       ok (15 chars)
+  [2] act       interpret_request   genre=pop (keyword) | mood=happy (keyword)
+  [3] plan      make_plan           7 steps
+                                    - look up the genre guide for 'pop' (neighbors, typical energy)
+                                    - look up the mood guide for 'happy' (neighbors, typical energy)
+                                    - search the song liner notes for the wording of the request
+                                    - no energy level stated, so take a typical energy from the guides
+                                    - score all 20 songs and rank them
+                                    - self-check the top results and re-rank if a stated preference was ignored
+                                    - verify songs, citations and quotes before answering
+  [4] act       retrieve_knowledge  genres.md#pop, moods.md#happy
+  [5] act       score_catalog       Sunrise City 3.70, Rooftop Lights 2.74, Gym Hero 2.62
+  [6] check     self_check          no issues
+  [7] guardrail verify_output       ok (3 songs in catalog, 4 citations checked)
+  [8] act       estimate_confidence 0.99 (high)
+
+$ python -m src.main "heading to the gym for leg day" 
+========================================================================
+Request:    heading to the gym for leg day
+Understood: mood=intense (few-shot 0.78) | energy=0.92 (few-shot 0.78)
+Plan:
+  1. look up the mood guide for 'intense' (neighbors, typical energy)
+  2. search the song liner notes for the wording of the request
+  3. score all 20 songs and rank them
+  4. self-check the top results and re-rank if a stated preference was ignored
+  5. verify songs, citations and quotes before answering
+------------------------------------------------------------------------
+Top 3 of 20 songs
+1. Gym Hero by Max Pulse [pop, intense]  score 2.96
+     - mood match: intense (+1.00)
+     - energy 0.93 vs target 0.92 (+1.48)
+     - liner notes match your request (+0.48) [song_notes.md#gym-hero]
+       "Punchy bass and shouted hooks engineered for the last rep."
+2. Storm Runner by Voltline [rock, intense]  score 2.48
+     - mood match: intense (+1.00)
+     - energy 0.91 vs target 0.92 (+1.48)
+3. Iron Cathedral by Black Anvil [metal, angry]  score 1.93
+     - energy 0.97 vs target 0.92 (+1.43)
+     - related mood: angry is close to intense (+0.50) [moods.md#intense]
+       "Intense songs are hard hitting and driving, made to push you."
+------------------------------------------------------------------------
+Self-check: no issues
+Confidence: 0.91 (high)
+Sources:    song_notes.md#gym-hero, moods.md#intense
+
+$ python -m src.main "jazz for sunday morning coffee" 
+========================================================================
+Request:    jazz for sunday morning coffee
+Understood: genre=jazz (keyword) | mood=relaxed (few-shot 1.00) | energy=0.40 (few-shot 1.00)
+Plan:
+  1. look up the genre guide for 'jazz' (neighbors, typical energy)
+  2. look up the mood guide for 'relaxed' (neighbors, typical energy)
+  3. search the song liner notes for the wording of the request
+  4. score all 20 songs and rank them
+  5. self-check the top results and re-rank if a stated preference was ignored
+  6. verify songs, citations and quotes before answering
+------------------------------------------------------------------------
+Top 3 of 20 songs
+1. Coffee Shop Stories by Slow Stereo [jazz, relaxed]  score 5.39
+     - genre match: jazz (+2.00)
+     - mood match: relaxed (+1.00)
+     - energy 0.37 vs target 0.40 (+1.46)
+     - liner notes match your request (+0.94) [song_notes.md#coffee-shop-stories]
+       "Brushed drums, upright bass and a mellow saxophone."
+2. Midnight Coding by LoRoom [lofi, chill]  score 2.97
+     - energy 0.42 vs target 0.40 (+1.47)
+     - related genre: lofi is close to jazz (+1.00) [genres.md#jazz]
+       "Jazz is built on improvisation, swing and rich chords, played on instruments such as saxophone, piano and upright bass."
+     - related mood: chill is close to relaxed (+0.50) [moods.md#relaxed]
+       "Relaxed songs are easy going and comfortable, like an unhurried morning."
+3. Library Rain by Paper Lanterns [lofi, chill]  score 2.92
+     - energy 0.35 vs target 0.40 (+1.42)
+     - related genre: lofi is close to jazz (+1.00) [genres.md#jazz]
+       "Jazz is built on improvisation, swing and rich chords, played on instruments such as saxophone, piano and upright bass."
+     - related mood: chill is close to relaxed (+0.50) [moods.md#relaxed]
+       "Relaxed songs are easy going and comfortable, like an unhurried morning."
+------------------------------------------------------------------------
+Self-check: no issues
+Confidence: 1.00 (high)
+Sources:    song_notes.md#coffee-shop-stories, genres.md#jazz, moods.md#relaxed
+

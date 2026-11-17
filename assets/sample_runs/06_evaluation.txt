@@ -1,0 +1,93 @@
+$ python -m src.evaluate
+VIBEFINDER 2.0 EVALUATION
+================================================================================================
+1. Agent cases (full system), 24 predefined requests
+
+case                  group               result  status        conf  top pick
+------------------------------------------------------------------------------------------------
+explicit-pop          explicit labels     PASS    ok            0.99  Sunrise City
+explicit-rock         explicit labels     PASS    ok            1.00  Storm Runner
+explicit-lofi         explicit labels     PASS    ok            0.95  Midnight Coding
+explicit-hiphop       explicit labels     PASS    ok            1.00  Concrete Crown
+label-bias            known 1.0 failures  PASS    ok            0.99  Sunrise City
+kpop-not-in-catalog   known 1.0 failures  PASS    ok            0.79  Sunrise City
+punk-not-in-catalog   known 1.0 failures  PASS    ok            0.59  Storm Runner
+sad-but-hyped         known 1.0 failures  PASS    needs_review  0.45  Cabin Letters
+calm-pop              known 1.0 failures  PASS    ok            0.75  Velvet Hours
+gym                   situational         PASS    ok            0.91  Gym Hero
+sleep                 situational         PASS    ok            1.00  Spacewalk Thoughts
+date-night            situational         PASS    ok            1.00  Velvet Hours
+coffee-jazz           situational         PASS    ok            1.00  Coffee Shop Stories
+finals                situational         PASS    ok            0.84  Focus Flow
+rainy-reading         situational         PASS    ok            0.60  Library Rain
+breakup               situational         FAIL    ok            0.86  Velvet Hours
+                        x top mood romantic, expected sad
+pumping-iron          situational         PASS    needs_review  0.43  Iron Cathedral
+not-pop               negation            PASS    ok            0.74  Storm Runner
+no-jazz               negation            PASS    ok            0.81  Island Time
+empty                 guardrails          PASS    rejected      0.00  -
+no-words              guardrails          PASS    rejected      0.00  -
+too-long              guardrails          PASS    rejected      0.00  -
+off-topic             guardrails          PASS    clarify       0.00  -
+crisis                guardrails          PASS    support       0.00  -
+
+By group: explicit labels 4/4, known 1.0 failures 5/5, situational 7/8, negation 2/2, guardrails 5/5
+Average confidence when songs were returned: 0.83 (passing cases 0.82, failing cases 0.86)
+Output guardrail: 31 cited sources across all answers, 0 answers failed verification
+
+================================================================================================
+2. Same cases with retrieval and few-shot switched off (1.0 style exact matching)
+   (the baseline cannot cite sources, so 'must cite a source' checks are skipped for it)
+
+case                  full system   baseline    baseline top pick
+------------------------------------------------------------------------------------------------
+explicit-pop          PASS          PASS        Sunrise City
+explicit-rock         PASS          PASS        Storm Runner
+explicit-lofi         PASS          PASS        Library Rain
+explicit-hiphop       PASS          PASS        Concrete Crown
+label-bias            PASS          FAIL        Sunrise City
+kpop-not-in-catalog   PASS          FAIL        Rooftop Lights
+punk-not-in-catalog   PASS          FAIL        (needs_review)
+sad-but-hyped         PASS          PASS        Cabin Letters
+calm-pop              PASS          FAIL        Sunrise City
+gym                   PASS          FAIL        (clarify)
+sleep                 PASS          FAIL        (clarify)
+date-night            PASS          FAIL        (clarify)
+coffee-jazz           PASS          PASS        Coffee Shop Stories
+finals                PASS          FAIL        (clarify)
+rainy-reading         PASS          FAIL        (clarify)
+breakup               FAIL          FAIL        (clarify)
+pumping-iron          PASS          FAIL        (clarify)
+not-pop               PASS          PASS        Storm Runner
+no-jazz               PASS          PASS        Island Time
+empty                 PASS          PASS        (rejected)
+no-words              PASS          PASS        (rejected)
+too-long              PASS          PASS        (rejected)
+off-topic             PASS          PASS        (clarify)
+crisis                PASS          PASS        (support)
+
+================================================================================================
+3. Interpreter accuracy: keyword baseline vs few-shot specialization
+   (a request counts as correct only if every expected slot is right and no genre is invented)
+
+Development set (used while tuning thresholds)
+  group               keyword only    with few-shot   
+  explicit labels     8/8             8/8             
+  situational         0/20            18/20           
+  no shared words     0/4             0/4             
+  mixed               1/2             2/2             
+  TOTAL               9/34 (26%)      28/34 (82%)     
+
+Held-out test set (written after tuning, never tuned against)
+  group               keyword only    with few-shot   
+  explicit labels     6/6             6/6             
+  situational         1/18            8/18            
+  TOTAL               7/24 (29%)      14/24 (58%)     
+
+================================================================================================
+SUMMARY
+  Agent cases passed, full system:        23/24 (96%)
+  Agent cases passed, baseline:           13/24 (54%)
+  Interpreter accuracy, development set:  keyword 9/34 (26%)  ->  few-shot 28/34 (82%)
+  Interpreter accuracy, held-out set:     keyword 7/24 (29%)  ->  few-shot 14/24 (58%)
+  Average confidence:                     0.83

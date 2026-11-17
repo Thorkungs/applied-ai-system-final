@@ -1,0 +1,87 @@
+$ python -m src.main "happy k-pop" --baseline
+========================================================================
+Request:    happy k-pop
+Understood: genre=k-pop (keyword) | mood=happy (keyword)
+Plan:
+  1. knowledge retrieval is off, so use exact label matching only
+  2. score all 20 songs and rank them
+  3. self-check the top results and re-rank if a stated preference was ignored
+  4. verify songs, citations and quotes before answering
+------------------------------------------------------------------------
+Top 2 of 20 songs
+1. Rooftop Lights by Indigo Parade [indie pop, happy]  score 1.00
+     - mood match: happy (+1.00)
+2. Sunrise City by Neon Echo [pop, happy]  score 1.00
+     - mood match: happy (+1.00)
+------------------------------------------------------------------------
+Self-check: genre_unavailable, weak_match
+Note:       The catalog has no k-pop songs, so the genre could not be matched at all.
+Note:       Even the best song is a weak match for what you asked, so treat these as rough suggestions.
+Confidence: 0.45 (low)  ->  please review, I am not sure about this one
+
+$ python -m src.main "happy k-pop" 
+========================================================================
+Request:    happy k-pop
+Understood: genre=k-pop (keyword) | mood=happy (keyword)
+Plan:
+  1. look up the genre guide for 'k-pop' (neighbors, typical energy)
+  2. look up the mood guide for 'happy' (neighbors, typical energy)
+  3. search the song liner notes for the wording of the request
+  4. no energy level stated, so take a typical energy from the guides
+  5. score all 20 songs and rank them
+  6. self-check the top results and re-rank if a stated preference was ignored
+  7. verify songs, citations and quotes before answering
+------------------------------------------------------------------------
+Top 3 of 20 songs
+1. Sunrise City by Neon Echo [pop, happy]  score 2.70
+     - mood match: happy (+1.00)
+     - related genre: pop is close to k-pop (+1.00) [genres.md#k-pop]
+       "K-pop is Korean pop music: highly produced, upbeat and choreography driven, mixing pop choruses with edm drops and hip hop verses."
+     - energy 0.82 vs typical 0.75 from the guide (+0.70) [moods.md#happy]
+2. Laser Bloom by Pulse Garden [edm, euphoric]  score 2.10
+     - related genre: edm is close to k-pop (+1.00) [genres.md#k-pop]
+       "K-pop is Korean pop music: highly produced, upbeat and choreography driven, mixing pop choruses with edm drops and hip hop verses."
+     - related mood: euphoric is close to happy (+0.50) [moods.md#happy]
+       "Happy songs are bright, warm and feel good."
+     - energy 0.95 vs typical 0.75 from the guide (+0.60) [moods.md#happy]
+3. Rooftop Lights by Indigo Parade [indie pop, happy]  score 1.74
+     - mood match: happy (+1.00)
+     - energy 0.76 vs typical 0.75 from the guide (+0.74) [moods.md#happy]
+------------------------------------------------------------------------
+Self-check: genre_unavailable
+Note:       The catalog has no k-pop songs. Using the closest genres from the guide instead: pop, edm, hip hop.
+Confidence: 0.79 (medium)
+Sources:    genres.md#k-pop, moods.md#happy
+
+$ python -m src.main "rainy afternoon reading" --baseline
+========================================================================
+Request:    rainy afternoon reading
+Status:     clarify
+------------------------------------------------------------------------
+I need a little more to go on: I couldn't find a music preference in that. Tell me a genre, a mood, an energy level, or what you're doing, for example: 'chill lofi for studying' or 'something for the gym'.
+
+$ python -m src.main "rainy afternoon reading" 
+========================================================================
+Request:    rainy afternoon reading
+Understood: nothing I can score
+Plan:
+  1. search the song liner notes for the wording of the request
+  2. score all 20 songs and rank them
+  3. self-check the top results and re-rank if a stated preference was ignored
+  4. verify songs, citations and quotes before answering
+------------------------------------------------------------------------
+Top 3 of 20 songs
+1. Library Rain by Paper Lanterns [lofi, chill]  score 1.00
+     - liner notes match your request (+1.00) [song_notes.md#library-rain]
+       "Soft piano over recorded rainfall and turning pages."
+2. Rainy Day Blues by Delta Mae [blues, sad]  score 0.48
+     - liner notes match your request (+0.48) [song_notes.md#rainy-day-blues]
+       "Slide guitar and a weary voice singing about bad luck."
+3. Rooftop Lights by Indigo Parade [indie pop, happy]  score 0.26
+     - liner notes match your request (+0.26) [song_notes.md#rooftop-lights]
+       "Jangly guitars, handclaps and a feel good chorus about summer nights with friends."
+------------------------------------------------------------------------
+Self-check: no issues
+Confidence: 0.60 (medium)
+Sources:    song_notes.md#library-rain, song_notes.md#rainy-day-blues, song_notes.md#rooftop-lights
+
